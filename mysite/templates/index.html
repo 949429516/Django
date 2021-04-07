@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <h1>模板标记的学习</h1>
+    <p>{{ name }}</p>
+    <p>{{ users.0 }}</p>
+    <p>{{ users.1 }}</p>
+    <p>{{ user_dict.k1 }}</p>
+    <p>{{ user_dict.k2 }}</p>
+    <h3>循环</h3>
+    <ul>
+        {% for item in users %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+    <h3>循环2</h3>
+    <table border="1">
+        {% for row in user_list_dict %}
+            <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.name }}</td>
+                <td>{{ row.email }}</td>
+                <td>
+                    <a>编辑</a>|<a href="/del/?nid={{ row.id }}">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
