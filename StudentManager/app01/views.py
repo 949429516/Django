@@ -1,0 +1,38 @@
+from django.shortcuts import render, redirect
+import pymysql
+
+def classes(request):
+    conn = pymysql.connect(host= "localhost", port= 3306, user= "root",
+                           password= "19950811", database= "oldboy",
+                           charset= "utf8")
+    cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+    sql_find = "select id, title from class;"
+    try:
+        cursor.execute(sql_find)
+        class_list = cursor.fetchall()
+    except:
+        conn.rollback()
+    cursor.close()
+    conn.close()
+    return render(request, 'classes.html', {'class_list': class_list})
+
+
+def add_class(request):
+    if request.method == "GET":
+        return render(request, 'add_class.html')
+    else:
+        value = request.POST.get('title')
+        conn = pymysql.connect(host="localhost", port=3306, user="root",
+                               password="19950811", database="oldboy",
+                               charset="utf8")
+        cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+        sql_find = "insert into class (title) values ('{}');".format(value)
+        print(sql_find)
+        try:
+            cursor.execute(sql_find)
+            conn.commit()
+        except:
+            conn.rollback()
+        cursor.close()
+        conn.close()
+        return redirect('/classes/')
