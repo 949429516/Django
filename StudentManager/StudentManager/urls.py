@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^classes/', views.classes),
     re_path(r'^add_class/', views.add_class),
+    re_path(r'^del_class/', views.del_class),
 ]

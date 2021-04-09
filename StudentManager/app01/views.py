@@ -36,3 +36,21 @@ def add_class(request):
         cursor.close()
         conn.close()
         return redirect('/classes/')
+
+
+def del_class(request):
+    nid = request.GET.get("nid")
+    conn = pymysql.connect(host="localhost", port=3306, user="root",
+                           password="19950811", database="oldboy",
+                           charset="utf8")
+    cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+    sql_find = "delete from class where id = {};".format(nid)
+    print(sql_find)
+    try:
+        cursor.execute(sql_find)
+        conn.commit()
+    except:
+        conn.rollback()
+    cursor.close()
+    conn.close()
+    return redirect('/classes/')
