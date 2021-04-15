@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+{#    <script src="../StudentManager/static/jquery-1.11.3.js"></script>#}
+{#    <script>#}
+{#        function getXhr() {#}
+{#            if(window.XMLHttpRequest){#}
+{#                return new XMLHttpRequest()#}
+{#            }else {#}
+{#                return new ActiveXObject('Microsoft.XMLHTTP')#}
+{#            }#}
+{#        }#}
+{#        function findclass() {#}
+{#            var xhr = getXhr();#}
+{#            var url = '/classes/';#}
+{#            xhr.open('get', url, true);#}
+{#            xhr.onreadystatechage = function () {#}
+{#                if(xhr.readyState == 4 && xhr.status == 200){#}
+{#                    $('#show').html(xhr.responseText);#}
+{#                }#}
+{#            };#}
+{#            xhr.send(null);#}
+{#        }#}
+{#    </script>#}
+</head>
+<body>
+    <h1>添加学员</h1>
+    <form method="POST" action="/add_student/">
+        <p>学员名称：<input type="text" name="name"/></p>
+        <p>所属班级：
+            <select name="class_id">
+                {% for row in class_list %}
+                    <option value={{ row.id }}>{{ row.title }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

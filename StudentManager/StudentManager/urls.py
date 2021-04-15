@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-from app01 import views, teacher
+from app01 import views, teacher, students
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +28,7 @@ urlpatterns = [
     re_path(r'^add_teacher/', teacher.add_teacher),
     re_path(r'^del_teacher/', teacher.del_teacher),
     re_path(r'^edit_teacher/', teacher.edit_teacher),
+
+    re_path(r'^students/', students.findstudent),
+    re_path(r'^add_student/', students.add_student),
 ]
