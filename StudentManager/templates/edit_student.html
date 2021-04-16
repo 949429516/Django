@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改学员信息</title>
+</head>
+<body>
+    <h1>添加学员</h1>
+    <form method="POST" action="/edit_student/?nid={{ student_list.id }}">
+        <p>学员名称：<input type="text" name="name" value={{ student_list.name }}></p>
+        <p>所属班级：
+            <select name="class_id">
+                <option value={{ student_list.class_id }} selected>{{ student_list.title }}</option>
+                {% for row in class_list %}
+                    <option value={{ row.id }}>{{ row.title }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>
