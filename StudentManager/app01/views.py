@@ -1,5 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
+from .SqlManager import *
 import pymysql
+
+
+db = dbManager()
+
 
 def classes(request):
     conn = pymysql.connect(host= "localhost", port= 3306, user= "root",
@@ -22,20 +27,22 @@ def add_class(request):
         return render(request, 'add_class.html')
     else:
         value = request.POST.get('title')
-        conn = pymysql.connect(host="localhost", port=3306, user="root",
-                               password="19950811", database="oldboy",
-                               charset="utf8")
-        cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-        sql_find = "insert into class (title) values ('{}');".format(value)
-        print(sql_find)
-        try:
-            cursor.execute(sql_find)
-            conn.commit()
-        except:
-            conn.rollback()
-        cursor.close()
-        conn.close()
-        return redirect('/classes/')
+        if len(value) > 0:
+            sql_find = "insert into class (title) values ('{}');".format(value)
+            db.commit(sql_find)
+            return redirect('/classes/')
+        else:
+            return render(request, 'add_class.html', {'msg': '班级名称不能为空'})
+# 对话框的提交
+def modal_add_class(request):
+    title = request.POST.get('title')
+    if len(title) > 0:
+        sql = "insert into class(title) values ('{}')".format(title)
+        db.commit(sql)
+        return HttpResponse('OK')
+    else:
+        # 页面不要刷新并且提示错误信息
+        return HttpResponse('班级标题不能为空')
 
 
 def del_class(request):

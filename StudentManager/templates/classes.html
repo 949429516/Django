@@ -3,11 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>班级列表</title>
+    <style>
+        .hide{
+            display: none;
+        }
+        .shadow{
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0.3;
+            z-index: 999;
+        }
+        .modal{
+            z-index: 1000;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            height: 300px;
+            width: 400px;
+            background-color: white;
+            margin-left: -200px;
+            margin-top: -150px;
+        }
+    </style>
+    <script src="/static/jquery-1.11.3.js"></script>
+    <script>
+        function showModal() {
+            document.getElementById('shadow').classList.remove('hide');
+            document.getElementById('modal').classList.remove('hide');
+        }
+        function AjaxSend() {
+            $.ajax({
+                url: '/modal_add_class/',
+                type: 'POST',
+                data: {'title': $('#title').val()},
+                success: function (data) {
+                    // 当服务端处理完毕后返回数据时，该函数自动调用
+                    // data=服务端返回值
+                    console.log(data);
+                    if(data == "OK"){
+                        location.href='/classes/';
+                    }else{
+                        $('#errormsg').text(data);
+                    }
+                }
+            })
+        }
+        function cancelModal() {
+            document.getElementById('shadow').classList.add('hide');
+            document.getElementById('modal').classList.add('hide');
+        }
+    </script>
 </head>
 <body>
     <h1>班级列表</h1>
     <div>
         <a href="/add_class/">添加</a>
+        <a onclick="showModal()">对话框添加</a>
     </div>
     <table>
         <thead>
@@ -27,5 +82,13 @@
             {% endfor %}
         </tbody>
     </table>
+    <div id="shadow" class="shadow hide"></div>
+    <div id="modal" class="modal hide">
+        <p>
+            <input id="title" type="text" name="title">
+        </p>
+        <input type="button" value="提交" onclick="AjaxSend();"><span id="errormsg"></span>
+        <input type="button" value="取消" onclick="cancelModal();">
+    </div>
 </body>
 </html>
