@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .SqlManager import *
-import pymysql
+from .SqlManager import dbManager
+import pymysql, json
+
 
 
 db = dbManager()
@@ -96,3 +97,16 @@ def edit_class(request):
         cursor.close()
         conn.close()
         return redirect('/classes/')
+
+
+def modal_edit_class(request):
+    ret = {'status': True, 'message': None}
+    try:
+        nid = request.POST.get('nid')
+        content = request.POST.get('content')
+        sql = "update class set title = '{}' where id = {}".format(content, nid)
+        db.commit(sql)
+    except Exception as e:
+        ret['status'] = False
+        ret['message'] = e
+    return HttpResponse(json.dumps(ret))

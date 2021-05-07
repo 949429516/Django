@@ -31,6 +31,7 @@
     </style>
     <script src="/static/jquery-1.11.3.js"></script>
     <script>
+        {#    添加功能模块对话框#}
         function showModal() {
             document.getElementById('shadow').classList.remove('hide');
             document.getElementById('modal').classList.remove('hide');
@@ -55,6 +56,46 @@
         function cancelModal() {
             document.getElementById('shadow').classList.add('hide');
             document.getElementById('modal').classList.add('hide');
+            document.getElementById('editModal').classList.add('hide');
+        }
+
+        {#编辑功能#}
+        function modelEdit(ths) {
+            document.getElementById('shadow').classList.remove('hide');
+            document.getElementById('editModal').classList.remove('hide');
+            /*
+            1.获取当前点击标签
+            2.当前标签的父标签，再找上一级标签
+            3.获取班级当前行班级名称赋值给对话框
+            */
+            var row = $(ths).parent().prevAll();
+            {# 获取td里的内容 #}
+            var content = $(row[0]).text();
+            var contentid = $(row[1]).text();
+            $('#eidtTitle').val(content);
+            $('#eidtid').val(contentid);
+        }
+        function editAjaxSend() {
+            var nid = $('#eidtid').val();
+            var content = $('#eidtTitle').val();
+            $.ajax({
+                url: "/modal_edit_class/",
+                type: 'POST',
+                data: {'nid': nid, 'content': content},
+                success: function (arg) {
+                    //arg是字符串类型
+                    //JSON.parse() -> 对象
+                    //JSON.stringify(对象) ->字符串
+                    arg = JSON.parse(arg);
+                    if(arg.status){
+                        //location.href = '/classes/';
+                        location.reload();
+                    }else{
+                        alert(arg.message)
+                    }
+                }
+                }
+            )
         }
     </script>
 </head>
@@ -76,18 +117,37 @@
                 <tr>
                     <td>{{ row.id }}</td>
                     <td>{{ row.title }}</td>
-                    <td><a href="/edit_class/?nid={{ row.id }}">编辑</a></td>
-                    <td><a href="/del_class/?nid={{ row.id }}">删除</a></td>
+                    <td>
+                        <a href="/edit_class/?nid={{ row.id }}">编辑</a>
+                        <a onclick="modelEdit(this);">对话框编辑</a>
+                        <a href="/del_class/?nid={{ row.id }}">删除</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+
+{#    添加功能模块对话框#}
     <div id="shadow" class="shadow hide"></div>
     <div id="modal" class="modal hide">
         <p>
             <input id="title" type="text" name="title">
         </p>
         <input type="button" value="提交" onclick="AjaxSend();"><span id="errormsg"></span>
+        <input type="button" value="取消" onclick="cancelModal();">
+    </div>
+
+
+{#    编辑功能模块对话框#}
+    <div id="shadow" class="shadow hide"></div>
+    <div id="editModal" class="modal hide">
+        <h3>编辑框</h3>
+        <p>
+            <input id="eidtid" type="text" name="id" style="display: none">
+            <input id="eidtTitle" type="text" name="title">
+        </p>
+        <input type="button" value="提交" onclick="editAjaxSend();"><span id="errormsg"></span>
         <input type="button" value="取消" onclick="cancelModal();">
     </div>
 </body>
