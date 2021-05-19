@@ -57,6 +57,7 @@
             document.getElementById('shadow').classList.add('hide');
             document.getElementById('modal').classList.add('hide');
             document.getElementById('editModal').classList.add('hide');
+            document.getElementById('delModal').classList.add('hide');
         }
 
         {#编辑功能#}
@@ -97,6 +98,33 @@
                 }
             )
         }
+        function modeldel(ths) {
+            document.getElementById('shadow').classList.remove('hide');
+            document.getElementById('delModal').classList.remove('hide');
+            var row = $(ths).parent().prevAll();
+            var id = $(row[1]).text();
+            var name = $(row[0]).text();
+            $("#delid").text(id);
+            $("#delname").text(name);
+        }
+        function delAjaxSend() {
+            var nid = $("#delid").text();
+            var name = $("#delname").text();
+            $.ajax({
+                url: "/modal_del_class/",
+                type: "POST",
+                data: {'nid': nid, "name": name},
+                success: function (arg) {
+                    arg = JSON.parse(arg);
+                    if(arg.status){
+                        location.reload();
+                    }else{
+                        alert(arg.message)
+                    }
+                }
+            })
+        }
+        
     </script>
 </head>
 <body>
@@ -121,6 +149,7 @@
                         <a href="/edit_class/?nid={{ row.id }}">编辑</a>
                         <a onclick="modelEdit(this);">对话框编辑</a>
                         <a href="/del_class/?nid={{ row.id }}">删除</a>
+                        <a onclick="modeldel(this);">对话框删除</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -150,5 +179,19 @@
         <input type="button" value="提交" onclick="editAjaxSend();"><span id="errormsg"></span>
         <input type="button" value="取消" onclick="cancelModal();">
     </div>
+
+{#对话框删除#}
+    <div id="shadow" class="shadow hide"></div>
+    <div id="delModal" class="modal hide">
+        <h3>删除框</h3>
+        <p>
+            <a id = "delid" style="display: none"></a>
+            <a>是否删除:</a>
+            <a id = "delname"></a>
+        </p>
+        <input type="button" value="提交" onclick="delAjaxSend();"><span id="errormsg"></span>
+        <input type="button" value="取消" onclick="cancelModal();">
+    </div>
+
 </body>
 </html>

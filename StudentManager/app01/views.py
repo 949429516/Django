@@ -2,15 +2,13 @@ from django.shortcuts import render, redirect, HttpResponse
 from .SqlManager import dbManager
 import pymysql, json
 
-
-
 db = dbManager()
 
 
 def classes(request):
-    conn = pymysql.connect(host= "localhost", port= 3306, user= "root",
-                           password= "19950811", database= "oldboy",
-                           charset= "utf8")
+    conn = pymysql.connect(host="localhost", port=3306, user="root",
+                           password="19950811", database="oldboy",
+                           charset="utf8")
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     sql_find = "select id, title from class;"
     try:
@@ -34,6 +32,8 @@ def add_class(request):
             return redirect('/classes/')
         else:
             return render(request, 'add_class.html', {'msg': '班级名称不能为空'})
+
+
 # 对话框的提交
 def modal_add_class(request):
     title = request.POST.get('title')
@@ -62,6 +62,18 @@ def del_class(request):
     cursor.close()
     conn.close()
     return redirect('/classes/')
+
+
+def modal_del_class(request):
+    ret = {'status': True, 'message': None}
+    try:
+        nid = request.POST.get("nid")
+        name = request.POST.get("name")
+        sql = "delete from class where id = {};".format(nid)
+        db.commit(sql)
+    except Exception as e:
+        ret = {'status': False, 'message': "删除%s失败%s" % name % e}
+    return HttpResponse(json.dumps(ret))
 
 
 def edit_class(request):
