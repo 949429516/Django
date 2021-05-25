@@ -4,10 +4,37 @@
     <meta charset="UTF-8">
     <title>学生列表</title>
 </head>
+<style>
+    .hide{
+        display: none;
+    }
+    .shadow{
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        background-color: black;
+        opacity: 0.4;
+        z-index: 999;
+    }
+    .add-modal{
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        background-color: white;
+        width: 400px;
+        height: 500px;
+        margin-left: -200px;
+        margin-top: -200px;
+        z-index: 1000;
+    }
+</style>
 <body>
     <h1>学生列表</h1>
     <div>
         <a href="/add_student/">添加学生</a>
+        <a id="addMoadl">对话框添加</a>
     </div>
     <table>
         <thead>
@@ -29,5 +56,53 @@
             {% endfor %}
         </tbody>
     </table>
+
+
+    <div id="shadow" class="shadow hide"></div>
+    <div id="add-modal" class="add-modal hide">
+        <p>
+            姓名：<input id="addName" type="text" name="name" placeholder="姓名">
+        </p>
+        <p>
+            班级：
+            <select id="addClassid">
+                {% for row in class_list %}
+                    <option value={{ row.id }}>{{ row.title }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <input id="btnAdd" type="button" value="添加">
+        <input id="cancel" type="button" value="取消">
+        <span id="addError" style='color: red'></span>
+    </div>
+
+
+    <script src="/static/jquery-1.11.3.js"></script>
+    <script>
+        $(function () {
+            $('#addMoadl').click(function () {
+                $("#shadow,#add-modal").removeClass('hide');
+            });
+            $('#cancel').click(function () {
+                $("#shadow,#add-modal").addClass('hide');
+            });
+            $('#btnAdd').click(function () {
+                $.ajax({
+                    url: '/modal_add_student/',
+                    type: 'POST',
+                    data: {'name': $('#addName').val(), 'class_id': $('#addClassid').val()},
+                    success: function (arg) {
+                        console.log(arg);
+                        arg = JSON.parse(arg);
+                        if(arg.status){
+                            location.reload();
+                        }else{
+                            $("#addError").text(arg.message);
+                        }
+                    }
+                })
+            })
+        })
+    </script>
 </body>
 </html>

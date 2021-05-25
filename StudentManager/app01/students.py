@@ -1,6 +1,8 @@
+import json
+
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .SqlManager import *
-
 
 db = dbManager()
 
@@ -8,7 +10,9 @@ db = dbManager()
 def findstudent(request):
     sql = "select student.id, student.name, class.title from student left join class on student.class_id = class.id"
     students_list = db.findmany(sql)
-    return render(request, 'students.html', {"students_list": students_list})
+    sql = "select id, title from class;"
+    class_list = db.findmany(sql)
+    return render(request, 'students.html', {"students_list": students_list, 'class_list': class_list})
 
 
 def add_student(request):
@@ -24,6 +28,19 @@ def add_student(request):
         return redirect('/students/')
 
 
+def modal_add_student(request):
+    ret = {'status': True, 'message': None}
+    try:
+        name = request.POST.get('name')
+        class_id = request.POST.get('class_id')
+        sql = "insert into student (name, class_id) values ('{}','{}')".format(name, class_id)
+        db.commit(sql)
+    except Exception as e:
+        ret['status'] = False
+        ret['message'] = str(e)
+    return HttpResponse(json.dumps(ret))
+
+
 def del_student(request):
     nid = request.GET.get('nid')
     sql = "delete from student where id = {};".format(nid)
@@ -34,7 +51,8 @@ def del_student(request):
 def edit_student(request):
     if request.method == "GET":
         nid = request.GET.get('nid')
-        sql = "select student.id, student.name, class.title, class_id from student left join class on student.class_id = class.id WHERE student.id = {};".format(nid)
+        sql = "select student.id, student.name, class.title, class_id from student left join class on student.class_id = class.id WHERE student.id = {};".format(
+            nid)
         student_list = db.findone(sql)
         SqlClass = "select id, title from class;"
         class_list = db.findmany(SqlClass)
