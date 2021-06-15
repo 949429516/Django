@@ -8,7 +8,7 @@ db = dbManager()
 
 
 def findstudent(request):
-    sql = "select student.id, student.name, class.title from student left join class on student.class_id = class.id"
+    sql = "select student.id, student.name, student.class_id, class.title from student left join class on student.class_id = class.id"
     students_list = db.findmany(sql)
     sql = "select id, title from class;"
     class_list = db.findmany(sql)
@@ -48,6 +48,19 @@ def del_student(request):
     return redirect('/students/')
 
 
+def modal_del_student(request):
+    ret = {'status': True, 'message': None}
+    try:
+        nid = request.POST.get('nid')
+        print(nid)
+        sql = "delete from student where id={};".format(nid)
+        db.commit(sql)
+    except Exception as e:
+        ret['status'] = False
+        ret['message'] = str(e)
+    return HttpResponse(json.dumps(ret))
+
+
 def edit_student(request):
     if request.method == "GET":
         nid = request.GET.get('nid')
@@ -66,3 +79,16 @@ def edit_student(request):
         print(sql)
         db.commit(sql)
         return redirect('/students/')
+
+def modal_edit_student(request):
+    ret = {'status': True, 'message': None}
+    try:
+        nid = request.POST.get('nid')
+        name = request.POST.get('name')
+        class_id = request.POST.get("class_id")
+        sql = "update student set name = '{}', class_id = {} where id = {}".format(name, class_id, nid)
+        db.commit(sql)
+    except Exception as e:
+        ret['status'] = False
+        ret['message'] = e
+    return HttpResponse(json.dumps(ret))
