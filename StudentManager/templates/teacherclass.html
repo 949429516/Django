@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生列表</title>
+</head>
+<style>
+    .hide{
+        display: none;
+    }
+    .shadow{
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        background-color: black;
+        opacity: 0.4;
+        z-index: 999;
+    }
+    .add-modal{
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        background-color: white;
+        width: 400px;
+        height: 500px;
+        margin-left: -200px;
+        margin-top: -200px;
+        z-index: 1000;
+    }
+</style>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>老师姓名</th>
+                <th>任课班级</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in teachers_list %}
+                <tr>
+                    <td>{{ row.tid }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.title }}</td>
+
+                    <td>
+                        <a>编辑</a>
+                        <a>删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
