@@ -5,11 +5,11 @@
     <title></title>
 </head>
 <body>
-    <h1>添加学员</h1>
-    <form method="POST" action="/add_student/">
-        <p>学员名称：<input type="text" name="name"/></p>
-        <p>所属班级：
-            <select name="class_id">
+    <h1>添加教师</h1>
+    <form method="POST" action="/add_teacherclass/">
+        <p>教师名称：<input type="text" name="name"/></p>
+        <p>任课班级：
+            <select name="classid" multiple="multiple">
                 {% for row in class_list %}
                     <option value={{ row.id }}>{{ row.title }}</option>
                 {% endfor %}

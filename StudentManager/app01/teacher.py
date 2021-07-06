@@ -70,3 +70,20 @@ def teachers(request):
         return render(request, 'teacherclass.html', {'teachers_list': teacherclass_list})
     else:
         pass
+
+
+def add_teacherclass(request):
+    if request.method == "GET":
+        sql = "SELECT id,title FROM class;"
+        class_list = db.findmany(sql)
+        return render(request, "add_teacherclass.html", {"class_list": class_list})
+    else:
+        class_list = request.POST.getlist("classid")
+        teachername = request.POST.get('name')
+        insertteachersql = "insert into teacher (name) values ('{}')".format(teachername)
+        id = db.commit(insertteachersql)
+        for item in class_list:
+            relation = "INSERT INTO relationship (teacher_id,class_id) VALUES ({},{})".format(id, int(item))
+            print(relation)
+            db.commit(relation)
+        return redirect("/teachers/")

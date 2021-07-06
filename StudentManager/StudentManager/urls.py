@@ -41,5 +41,6 @@ urlpatterns = [
     re_path(r'^modal_edit_student/', students.modal_edit_student),
 
     re_path(r'^teachers/', teacher.teachers),
+    re_path(r'^add_teacherclass/', teacher.add_teacherclass),
 
 ]

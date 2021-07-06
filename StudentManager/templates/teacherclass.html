@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>学生列表</title>
+    <title>教师列表</title>
 </head>
 <style>
     .hide{
@@ -31,6 +31,10 @@
     }
 </style>
 <body>
+    <h1>教师列表</h1>
+    <div>
+        <a href="/add_teacherclass/">添加</a>
+    </div>
     <table>
         <thead>
             <tr>
@@ -44,8 +48,11 @@
                 <tr>
                     <td>{{ row.tid }}</td>
                     <td>{{ row.name }}</td>
-                    <td>{{ row.title }}</td>
-
+                    <td>
+                        {% for item in row.title %}
+                            <span style="display: inline-block;padding: 5px;border: 1px solid red;">{{ item }}</span>
+                        {% endfor %}
+                    </td>
                     <td>
                         <a>编辑</a>
                         <a>删除</a>

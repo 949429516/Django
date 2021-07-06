@@ -10,7 +10,9 @@ class dbManager:
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         try:
             cursor.execute(sql_find)
+            id = int(conn.insert_id())
             conn.commit()
+            return id
         except:
             conn.rollback()
         cursor.close()
