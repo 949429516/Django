@@ -30,7 +30,7 @@ urlpatterns = [
     re_path(r'^teacher/', teacher.findteacher),
     re_path(r'^add_teacher/', teacher.add_teacher),
     re_path(r'^del_teacher/', teacher.del_teacher),
-    re_path(r'^edit_teacher/', teacher.edit_teacher),
+    #re_path(r'^edit_teacher/', teacher.edit_teacher),
 
     re_path(r'^students/', students.findstudent),
     re_path(r'^add_student/', students.add_student),
@@ -42,5 +42,6 @@ urlpatterns = [
 
     re_path(r'^teachers/', teacher.teachers),
     re_path(r'^add_teacherclass/', teacher.add_teacherclass),
+    re_path(r'^edit_teacherclass/', teacher.edit_teacherclass),
 
 ]

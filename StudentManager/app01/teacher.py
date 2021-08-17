@@ -52,21 +52,26 @@ def teachers(request):
         data_list = db.findmany(sql)
         teacherclass_list = []
         visted = []
+
         while data_list:
+            print(data_list)
             L = []
             data = data_list.pop()
             L.append(data['title'])
             tid = data['tid']
             if tid in visted:
-                data_list.pop()
-                continue
+                try:
+                    data_list.pop()
+                    continue
+                except Exception:
+                    pass
             visted.append(tid)
             for i in data_list:
                 if i['tid'] == tid:
                     L.append(i['title'])
             data['title'] = L
             teacherclass_list.append(data)
-        print(teacherclass_list)
+        #print(teacherclass_list)
         return render(request, 'teacherclass.html', {'teachers_list': teacherclass_list})
     else:
         pass
@@ -85,5 +90,35 @@ def add_teacherclass(request):
         for item in class_list:
             relation = "INSERT INTO relationship (teacher_id,class_id) VALUES ({},{})".format(id, int(item))
             print(relation)
+            db.commit(relation)
+        return redirect("/teachers/")
+
+
+def edit_teacherclass(request):
+    if request.method == "GET":
+        nid = request.GET.get('nid')
+        sql = "SELECT id,name FROM teacher where id={};".format(nid)
+        teacher_info = db.findone(sql)
+        sql = "select class_id from relationship where teacher_id = {};".format(nid)
+        class_info = db.findmany(sql)
+        sql = "select id,title from class;"
+        all_class_info = db.findmany(sql)
+        class_id = []
+        for i in class_info:
+            class_id.append(i['class_id'])
+        return render(request, 'edit_teacher.html',
+                      {"teacher_info": teacher_info, "class_info": class_id, "all_class_info": all_class_info})
+    else:
+        nid = request.GET.get("nid")
+        name = request.POST.get("name")
+        class_ids = request.POST.getlist("class_ids")
+        # 更新老师表
+        sql = "update teacher set name = ('{}') where id = {};".format(name, nid)
+        db.commit(sql)
+        # 更新老师和班级关系表,先删除所有对应关系然后再添加
+        sql = "delete from relationship where teacher_id = {};".format(nid)
+        db.commit(sql)
+        for item in class_ids:
+            relation = "INSERT INTO relationship (teacher_id,class_id) VALUES ({},{})".format(nid, int(item))
             db.commit(relation)
         return redirect("/teachers/")

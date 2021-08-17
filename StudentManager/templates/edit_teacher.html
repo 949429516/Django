@@ -5,8 +5,19 @@
     <title>修改</title>
 </head>
 <body>
-    <form method="post" action="/edit_teacher/?nid={{ data_list.id }}">
-        <p>教师名称：<input type="text" name="name" value={{ data_list.name }} ></p>
+    <form method="post" action="/edit_teacherclass/?nid={{ teacher_info.id }}">
+        <p>教师名称：<input type="text" name="name" value={{ teacher_info.name }} ></p>
+        <p>
+            <select name="class_ids" multiple size="10">
+                {% for item in all_class_info %}
+                    {% if item.id in class_info %}
+                        <option value="{{ item.id }}" selected>{{ item.title }}</option>
+                    {% else %}
+                        <option value="{{ item.id }}">{{ item.title }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </p>
         <input type="submit" value="提交">
     </form>
 </body>
