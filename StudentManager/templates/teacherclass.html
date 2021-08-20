@@ -18,7 +18,17 @@
         opacity: 0.4;
         z-index: 999;
     }
-    .add-modal{
+    .loading{
+        position: fixed;
+        width: 800px;
+        height: 600px;
+        left: 25%;
+        top: 25%;
+        margin-left: -25px;
+        margin-top: -25px;
+        background-image: url("/static/loading.gif");
+    }
+    .addmodal{
         position: fixed;
         left: 50%;
         top: 50%;
@@ -34,6 +44,7 @@
     <h1>教师列表</h1>
     <div>
         <a href="/add_teacherclass/">添加</a>
+        <a id="btnAdd">对话框添加教师</a>
     </div>
     <table>
         <thead>
@@ -62,5 +73,49 @@
         </tbody>
     </table>
 
+    <div id="shadow" class="shadow hide"></div>
+    <div id="loading" class="loading hide"></div>
+    <div id="addmodal" class="addmodal hide">
+        <p>
+            老师姓名:<input type="text" name="name">
+        </p>
+        <p>
+            <select id="classIds" multiple size="10">
+
+            </select>
+        </p>
+    </div>
+    <script src="/static/jquery-1.11.3.js"></script>
+    <script>
+        $(function () {
+            bindAdd();
+        });
+        function bindAdd(){
+            $("#btnAdd").click(function () {
+                $("#shadow,#loading").removeClass('hide');
+                /*
+                发送ajax请求，获取所有班级信息
+                再将classIds下拉框生成option
+                 */
+                $.ajax({
+                    url:'/get_all_class/',
+                    type:"GET",
+                    dataType:"JSON",
+                    success:function (arg) {
+                        //将所有的数据添加到select,option
+                        $.each(arg, function (i, row) {
+                            var tag = document.createElement('option');
+                            tag.innerHTML = row.title;
+                            tag.setAttribute('value',row.id);
+                            $("#classIds").append(tag);
+                        });
+                        $("#loading").addClass('hide');
+                        $("#addmodal").removeClass('hide');
+                    }
+                })
+        })
+        }
+
+    </script>
 </body>
 </html>

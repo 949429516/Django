@@ -1,4 +1,7 @@
-from django.shortcuts import render, redirect
+import json
+import time
+
+from django.shortcuts import render, redirect, HttpResponse
 from .SqlManager import dbManager
 
 db = dbManager()
@@ -122,3 +125,9 @@ def edit_teacherclass(request):
             relation = "INSERT INTO relationship (teacher_id,class_id) VALUES ({},{})".format(nid, int(item))
             db.commit(relation)
         return redirect("/teachers/")
+
+def get_all_class(request):
+    time.sleep(5)
+    sql = "select id,title from class;"
+    class_list = db.findmany(sql)
+    return HttpResponse(json.dumps(class_list))
