@@ -66,6 +66,7 @@
                     </td>
                     <td>
                         <a href="/edit_teacherclass/?nid={{ row.tid }}">编辑</a>
+                        <a id="btnEdit">对话框编辑</a>
                         <a>删除</a>
                     </td>
                 </tr>
@@ -87,11 +88,26 @@
         <a id="addSubmit">提交</a>
         <span id="editError" style='color: red'></span>
     </div>
+
+    <div id="editmodal" class="addmodal hide">
+        <P>
+            老师姓名:<input type="text" name="name" id="editName">
+            <input id="editid" type="text" style="display: none">
+        </P>
+        <P>
+            <select id="editclassIds" multiple size="10">
+
+            </select>
+        </P>
+        <a id="editSubmit">提交</a>
+    </div>
+
     <script src="/static/jquery-1.11.3.js"></script>
     <script>
         $(function () {
             bindAdd();
             bindAddSubmit();
+            bindEdit();
         });
         function bindAdd(){
             $("#btnAdd").click(function () {
@@ -134,6 +150,36 @@
                         }else{
                             $("#editError").text(arg.message);
                         }
+                    }
+                })
+            })
+        }
+        function bindEdit() {
+            $("#btnEdit").click(function () {
+                $("#shadow,#editmodal").removeClass('hide');
+                var row = $(this).parent().prevAll();
+                var teacherid = $(row[2]).text();
+                var name = $(row[1]).text();
+                $("#editid").val(teacherid);
+                $("#editName").val(name);
+                $.ajax({
+                    url:"/modal_edit_teacher/",
+                    type:"GET",
+                    data:{"teacherid":teacherid},
+                    dataType:"JSON",
+                    success:function (arg) {
+                        var class_info = arg.class_info;
+                        var all_class_info = arg.all_class_info;
+                        $.each(all_class_info, function (i, row) {
+                            var tag = document.createElement('option');
+                            tag.innerHTML = row.title;
+                            tag.setAttribute('value',row.id);
+                            if (class_info.indexOf(row.id)!=-1){
+                                tag.setAttribute('selected',true);
+                            }
+                            $("#editclassIds").append(tag);
+                        });
+
                     }
                 })
             })
