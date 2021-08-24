@@ -74,7 +74,7 @@ def teachers(request):
                     L.append(i['title'])
             data['title'] = L
             teacherclass_list.append(data)
-        #print(teacherclass_list)
+        # print(teacherclass_list)
         return render(request, 'teacherclass.html', {'teachers_list': teacherclass_list})
     else:
         pass
@@ -95,6 +95,22 @@ def add_teacherclass(request):
             print(relation)
             db.commit(relation)
         return redirect("/teachers/")
+
+
+def modal_add_teacherclass(request):
+    ret = {'status': True, "message": None}
+    try:
+        name = request.POST.get("name")
+        class_id_list = request.POST.getlist("class_id_list")
+        insertteachersql = "insert into teacher (name) values ('{}')".format(name)
+        id = db.commit(insertteachersql)
+        for item in class_id_list:
+            relationsql = "insert into relationship (teacher_id,class_id) values ({},{})".format(id, int(item))
+            db.commit(relationsql)
+    except Exception as e:
+        ret['status'] = False
+        ret['message'] = e
+    return HttpResponse(json.dumps(ret))
 
 
 def edit_teacherclass(request):
@@ -125,6 +141,7 @@ def edit_teacherclass(request):
             relation = "INSERT INTO relationship (teacher_id,class_id) VALUES ({},{})".format(nid, int(item))
             db.commit(relation)
         return redirect("/teachers/")
+
 
 def get_all_class(request):
     time.sleep(5)

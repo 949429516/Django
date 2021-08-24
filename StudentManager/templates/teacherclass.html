@@ -77,18 +77,21 @@
     <div id="loading" class="loading hide"></div>
     <div id="addmodal" class="addmodal hide">
         <p>
-            老师姓名:<input type="text" name="name">
+            老师姓名:<input type="text" name="name" id="addName">
         </p>
         <p>
             <select id="classIds" multiple size="10">
 
             </select>
         </p>
+        <a id="addSubmit">提交</a>
+        <span id="editError" style='color: red'></span>
     </div>
     <script src="/static/jquery-1.11.3.js"></script>
     <script>
         $(function () {
             bindAdd();
+            bindAddSubmit();
         });
         function bindAdd(){
             $("#btnAdd").click(function () {
@@ -115,7 +118,26 @@
                 })
         })
         }
-
+        function bindAddSubmit() {
+            $("#addSubmit").click(function () {
+                var name = $("#addName").val();
+                var class_id_list = $("#classIds").val();
+                $.ajax({
+                    url : '/modal_add_teacherclass/',
+                    type: 'POST',
+                    data:{"name":name,"class_id_list":class_id_list},
+                    dataType:"JSON",
+                    traditional:true,//提交的值有列表需要添加此属性
+                    success:function (arg) {
+                        if(arg.status){
+                            location.reload();
+                        }else{
+                            $("#editError").text(arg.message);
+                        }
+                    }
+                })
+            })
+        }
     </script>
 </body>
 </html>
