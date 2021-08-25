@@ -155,19 +155,25 @@ def modal_edit_teacher(request):
             class_id.append(i['class_id'])
         return HttpResponse(json.dumps({"class_info": class_id, "all_class_info": all_class_info}))
     else:
-        nid = request.GET.get("nid")
-        name = request.POST.get("name")
-        class_ids = request.POST.getlist("class_ids")
-        # 更新老师表
-        sql = "update teacher set name = ('{}') where id = {};".format(name, nid)
-        db.commit(sql)
-        # 更新老师和班级关系表,先删除所有对应关系然后再添加
-        sql = "delete from relationship where teacher_id = {};".format(nid)
-        db.commit(sql)
-        for item in class_ids:
-            relation = "INSERT INTO relationship (teacher_id,class_id) VALUES ({},{})".format(nid, int(item))
-            db.commit(relation)
-        return redirect("/teachers/")
+        ret = {'status': True, "message": None}
+        try:
+            nid = request.POST.get("teacher_id")
+            name = request.POST.get("name")
+            class_ids = request.POST.getlist("class_list")
+            print(nid,name,class_ids)
+            # 更新老师表
+            sql = "update teacher set name = ('{}') where id = {};".format(name, nid)
+            db.commit(sql)
+            # 更新老师和班级关系表,先删除所有对应关系然后再添加
+            sql = "delete from relationship where teacher_id = {};".format(nid)
+            db.commit(sql)
+            for item in class_ids:
+                relation = "INSERT INTO relationship (teacher_id,class_id) VALUES ({},{})".format(nid, int(item))
+                db.commit(relation)
+        except Exception as e:
+            ret['status'] = False
+            ret['message'] = e
+        return HttpResponse(json.dumps(ret))
 
 def get_all_class(request):
     time.sleep(5)
