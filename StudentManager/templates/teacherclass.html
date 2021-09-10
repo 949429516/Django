@@ -143,7 +143,7 @@
                     url : '/modal_add_teacherclass/',
                     type: 'POST',
                     data:{"name":name,"class_id_list":class_id_list},
-                    dataType:"JSON",
+                    dataType:"JSON",  //写列表用traditional可以，如果要发送字典需要使用序列化JSON.stringify({k1:'{k1}',})
                     traditional:true,//提交的值有列表需要添加此属性
                     success:function (arg) {
                         if(arg.status){
@@ -175,7 +175,7 @@
                             var tag = document.createElement('option');
                             tag.innerHTML = row.title;
                             tag.setAttribute('value',row.id);
-                            if (class_info.indexOf(row.id)!=-1){
+                            if (class_info.indexOf(row.id)!=-1){ //如果row.id在class_info中
                                 tag.setAttribute('selected',true);
                             }
                             $("#editclassIds").append(tag);
