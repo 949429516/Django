@@ -47,4 +47,6 @@ urlpatterns = [
     re_path(r'^edit_teacherclass/', teacher.edit_teacherclass),
     re_path(r'^modal_edit_teacher/', teacher.modal_edit_teacher),
 
+    re_path(r"^layout/", views.layout),
+
 ]

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="394efbec-512c-4964-8ebf-dce31e299dea" name="Default Changelist" comment="">
+    <list default="true" id="394efbec-512c-4964-8ebf-dce31e299dea" name="Default Changelist" comment="bootstrap">
+      <change afterPath="$PROJECT_DIR$/templates/layout.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/classes.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/classes.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/teacherclass.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/teacherclass.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StudentManager/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/StudentManager/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app01/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app01/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,23 +54,38 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+    <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/teacherclass.html">
+        <entry file="file://$PROJECT_DIR$/templates/layout.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="145" column="72" lean-forward="true" selection-start-line="145" selection-start-column="72" selection-end-line="145" selection-end-column="72" />
+            <state relative-caret-position="543">
+              <caret line="86" column="10" lean-forward="true" selection-start-line="86" selection-start-column="10" selection-end-line="86" selection-end-column="10" />
+              <folding>
+                <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app01/teacher.py">
+        <entry file="file://$PROJECT_DIR$/StudentManager/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="78">
-              <caret line="145" column="4" selection-start-line="145" selection-start-column="4" selection-end-line="145" selection-end-column="4" />
+            <state relative-caret-position="409">
+              <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#638#670#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app01/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="447">
+              <caret line="127" column="39" selection-start-line="127" selection-start-column="39" selection-end-line="127" selection-end-column="39" />
+              <folding>
+                <element signature="e#0#59#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -117,7 +133,6 @@
         <option value="$PROJECT_DIR$/templates/edit_student.html" />
         <option value="$PROJECT_DIR$/templates/add_class.html" />
         <option value="$PROJECT_DIR$/../../klpython/1.py" />
-        <option value="$PROJECT_DIR$/app01/views.py" />
         <option value="$PROJECT_DIR$/templates/students.html" />
         <option value="$PROJECT_DIR$/app01/students.py" />
         <option value="$PROJECT_DIR$/templates/add_student.html" />
@@ -125,10 +140,12 @@
         <option value="$PROJECT_DIR$/app01/SqlManager.py" />
         <option value="$PROJECT_DIR$/templates/edit_teacher.html" />
         <option value="$PROJECT_DIR$/templates/test.html" />
-        <option value="$PROJECT_DIR$/StudentManager/urls.py" />
         <option value="$PROJECT_DIR$/app01/teacher.py" />
         <option value="$PROJECT_DIR$/templates/classes.html" />
         <option value="$PROJECT_DIR$/templates/teacherclass.html" />
+        <option value="$PROJECT_DIR$/StudentManager/urls.py" />
+        <option value="$PROJECT_DIR$/app01/views.py" />
+        <option value="$PROJECT_DIR$/templates/layout.html" />
       </list>
     </option>
   </component>
@@ -144,27 +161,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Scope 'Changed Files'; set:Changed Files; ALL; class com.intellij.packageDependencies.ChangeListScope">
-          <expand>
-            <path>
-              <item name="StudentManager" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-            </path>
-            <path>
-              <item name="StudentManager" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="StudentManager" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="StudentManager" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -185,25 +181,33 @@
             <path>
               <item name="StudentManager" type="b2602c69:ProjectViewProjectNode" />
               <item name="StudentManager" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="font-awesome-4.7.0" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="StudentManager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="StudentManager" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="font-awesome-4.7.0" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="StudentManager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="StudentManager" type="462c0819:PsiDirectoryNode" />
               <item name="StudentManager" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="StudentManager" type="b2602c69:ProjectViewProjectNode" />
               <item name="StudentManager" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Changed Files'; set:Changed Files; ALL; class com.intellij.packageDependencies.ChangeListScope">
+          <expand>
+            <path>
+              <item name="StudentManager" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+            <path>
+              <item name="StudentManager" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="StudentManager" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="StudentManager" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -337,7 +341,8 @@
       <workItem from="1629810668113" duration="3531000" />
       <workItem from="1629815340798" duration="3472000" />
       <workItem from="1629897235621" duration="6609000" />
-      <workItem from="1631281502837" duration="3518000" />
+      <workItem from="1631281502837" duration="4768000" />
+      <workItem from="1632141807487" duration="5449000" />
     </task>
     <task id="LOCAL-00001" summary="ajax删除班级">
       <created>1621434526877</created>
@@ -409,17 +414,30 @@
       <option name="project" value="LOCAL" />
       <updated>1629904487636</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="bootstrap">
+      <created>1631285469075</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1631285469075</updated>
+    </task>
+    <task id="LOCAL-00012" summary="bootstrap">
+      <created>1631285954976</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1631285954976</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="112690000" />
+    <option name="totallyTimeSpent" value="119389000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="72" y="27" width="1846" height="899" extended-state="6" />
-    <editor active="true" />
+    <frame x="72" y="27" width="1848" height="1053" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18861607" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.060758084" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -433,7 +451,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49944195" weight="0.32931727" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5016741" side_tool="true" weight="0.38018742" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49832588" visible="true" weight="0.18473895" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.49832588" visible="true" weight="0.0754717" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="bottom" id="Database Console" order="13" weight="0.32931727" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -456,7 +474,8 @@
     <MESSAGE value="对话框ajax动态添加老师" />
     <MESSAGE value="对话框ajax动态编辑老师" />
     <MESSAGE value="对话框ajax动态编辑老师提交" />
-    <option name="LAST_COMMIT_MESSAGE" value="对话框ajax动态编辑老师提交" />
+    <MESSAGE value="bootstrap" />
+    <option name="LAST_COMMIT_MESSAGE" value="bootstrap" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/2b8adad8-4630-4b5a-aa27-2514e60432dc/console.sql">
@@ -488,16 +507,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
           <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app01/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1406">
-          <caret line="74" column="9" selection-start-line="74" selection-start-column="9" selection-end-line="74" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#59#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -593,13 +602,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StudentManager/urls.py">
+    <entry file="file://$PROJECT_DIR$/templates/teacherclass.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="509">
-          <caret line="47" column="54" selection-start-line="47" selection-start-column="54" selection-end-line="47" selection-end-column="54" />
-          <folding>
-            <element signature="e#638#670#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="471">
+          <caret line="155" column="14" lean-forward="true" selection-start-line="155" selection-start-column="14" selection-end-line="155" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -613,10 +619,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/teacherclass.html">
+    <entry file="file://$PROJECT_DIR$/app01/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="145" column="72" lean-forward="true" selection-start-line="145" selection-start-column="72" selection-end-line="145" selection-end-column="72" />
+        <state relative-caret-position="447">
+          <caret line="127" column="39" selection-start-line="127" selection-start-column="39" selection-end-line="127" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StudentManager/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+          <folding>
+            <element signature="e#638#670#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/layout.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="543">
+          <caret line="86" column="10" lean-forward="true" selection-start-line="86" selection-start-column="10" selection-end-line="86" selection-end-column="10" />
+          <folding>
+            <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

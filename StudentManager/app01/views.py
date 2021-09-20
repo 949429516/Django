@@ -122,3 +122,7 @@ def modal_edit_class(request):
         ret['status'] = False
         ret['message'] = e
     return HttpResponse(json.dumps(ret))
+
+
+def layout(request):
+    return render(request, 'layout.html')

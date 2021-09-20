@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.css">
+    <style>
+        body{
+            margin: 0;
+        }
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+        .pg-header {
+            height: 48px;
+            min-width: 1190px;
+            background-color: #1b6d85;
+            line-height: 48px;
+        }
+        .pg-header .logo{
+            color: white;
+            font-size: 18px;
+            width: 200px;
+            text-align: center;
+            border-right: 1px solid blue;
+        }
+        .pg-header .rmenus a{
+            display: inline-block;
+            padding: 0 20px;
+            color: white;
+        }
+        .pg-header .rmenus a:hover{
+            background-color: yellowgreen;
+        }
+        .pg-header .avatar{
+            padding: 0 20px;
+        }
+        .pg-header .avatar img{
+            border-radius: 50%;
+        }
+        .pg-header .avatar .user-info{
+            display: none;
+            position: absolute;width: 200px;top: 48px;right: 2px;background-color: black;z-index: 100
+        }
+        .pg-header .avatar:hover .user-info{
+            display: block;
+        }
+        .menus{
+            width: 200px;
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+            top: 48px;
+            background-color: #2aabd2;
+        }
+        .content{
+            position: absolute;
+            left: 200px;
+            right: 0px;
+            top: 48px;
+            bottom: 0px;
+            background-color: #b9def0;
+            min-width: 990px;
+            overflow: auto;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+    <div class="pg-header">
+        <div class="logo left">老屁眼后台管理</div>
+        <div class="avatar right">
+            <img style="width: 40px;height: 40px" src="/static/touxiang.jpg">
+            <div class="user-info">
+                <a>个人资料</a>
+                <a>注销</a>
+            </div>
+        </div>
+        <div class="rmenus right">
+            <a class="fa fa-info-circle">消息</a>
+            <a class="fa fa-envelope">邮件</a>
+        </div>
+    </div>
+    <div class="pg-body">
+        <div class="menus">菜单</div>
+        <div class="content">内容</div>
+    </div>
+</body>
+</html>
