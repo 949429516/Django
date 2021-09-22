@@ -6,7 +6,35 @@
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="/static/css/common.css">
-    {% block css %}{% endblock %}
+    <style>
+        .hide{
+            display: none;
+        }
+        .shadow1{
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            background-color: black;
+            opacity: 0.4;
+            z-index: 999;
+        }
+        .add-modal1{
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            background-color: white;
+            width: 400px;
+            height: 500px;
+            margin-left: -200px;
+            margin-top: -200px;
+            z-index: 1000;
+        }
+        {% block css %}{% endblock %}
+    </style>
+    <script src="/static/jquery-1.11.3.js"></script>
+
 </head>
 <body>
     <div class="pg-header">

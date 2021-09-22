@@ -1,42 +1,15 @@
 {% extends "layout.html" %}
 
 {% block xx %}
-    <style>
-        .hide{
-            display: none;
-        }
-        .shadow1{
-            position: fixed;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            background-color: black;
-            opacity: 0.3;
-            z-index: 999;
-        }
-        .modal1{
-            z-index: 1000;
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            height: 300px;
-            width: 400px;
-            background-color: white;
-            margin-left: -200px;
-            margin-top: -150px;
-        }
-    </style>
-    <script src="/static/jquery-1.11.3.js"></script>
     <script>
         {#    添加功能模块对话框#}
-        function showmodal1() {
+        function showModal() {
             document.getElementById('shadow1').classList.remove('hide');
-            document.getElementById('modal1').classList.remove('hide');
+            document.getElementById('add-modal1').classList.remove('hide');
         }
         function AjaxSend() {
             $.ajax({
-                url: '/modal1_add_class/',
+                url: '/modal_add_class/',
                 type: 'POST',
                 data: {'title': $('#title').val()},
                 success: function (data) {
@@ -51,17 +24,17 @@
                 }
             })
         }
-        function cancelmodal1() {
+        function cancelModal() {
             document.getElementById('shadow1').classList.add('hide');
-            document.getElementById('modal1').classList.add('hide');
-            document.getElementById('editmodal1').classList.add('hide');
-            document.getElementById('delmodal1').classList.add('hide');
+            document.getElementById('add-modal1').classList.add('hide');
+            document.getElementById('editModal').classList.add('hide');
+            document.getElementById('delModal').classList.add('hide');
         }
 
         {#编辑功能#}
         function modelEdit(ths) {
             document.getElementById('shadow1').classList.remove('hide');
-            document.getElementById('editmodal1').classList.remove('hide');
+            document.getElementById('editModal').classList.remove('hide');
             /*
             1.获取当前点击标签
             2.当前标签的父标签，再找上一级标签
@@ -78,7 +51,7 @@
             var nid = $('#eidtid').val();
             var content = $('#eidtTitle').val();
             $.ajax({
-                url: "/modal1_edit_class/",
+                url: "/modal_edit_class/",
                 type: 'POST',
                 data: {'nid': nid, 'content': content},
                 success: function (arg) {
@@ -98,7 +71,7 @@
         }
         function modeldel(ths) {
             document.getElementById('shadow1').classList.remove('hide');
-            document.getElementById('delmodal1').classList.remove('hide');
+            document.getElementById('delModal').classList.remove('hide');
             var row = $(ths).parent().prevAll();
             var id = $(row[1]).text();
             var name = $(row[0]).text();
@@ -109,7 +82,7 @@
             var nid = $("#delid").text();
             var name = $("#delname").text();
             $.ajax({
-                url: "/modal1_del_class/",
+                url: "/modal_del_class/",
                 type: "POST",
                 data: {'nid': nid, "name": name},
                 success: function (arg) {
@@ -123,12 +96,11 @@
             })
         }
     </script>
-</head>
 <body>
     <div>
         <div style="margin: 10px">
             <a class="btn btn-primary" href="/add_class/">添加</a>
-            <a class="btn btn-info" onclick="showmodal1()">对话框添加</a>
+            <a class="btn btn-info" onclick="showModal()">对话框添加</a>
         </div>
         <table class="table table-striped table-bordered table-hover">
         <thead>
@@ -156,35 +128,29 @@
         </tbody>
     </table>
     </div>
-
-
-
 {#    添加功能模块对话框#}
     <div id="shadow1" class="shadow1 hide"></div>
-    <div id="modal1" class="modal1 hide">
+    <div id='add-modal1' class="add-modal1 hide">
         <p>
             <input id="title" type="text" name="title">
         </p>
         <input type="button" value="提交" onclick="AjaxSend();"><span id="errormsg"></span>
-        <input type="button" value="取消" onclick="cancelmodal1();">
+        <input type="button" value="取消" onclick="cancelModal();">
     </div>
-
-
-{#    编辑功能模块对话框#}
+{#编辑功能模块对话框#}
     <div id="shadow1" class="shadow1 hide"></div>
-    <div id="editmodal1" class="modal1 hide">
+    <div id="editModal" class="add-modal1 hide">
         <h3>编辑框</h3>
         <p>
             <input id="eidtid" type="text" name="id" style="display: none">
             <input id="eidtTitle" type="text" name="title">
         </p>
         <input type="button" value="提交" onclick="editAjaxSend();"><span id="errormsg"></span>
-        <input type="button" value="取消" onclick="cancelmodal1();">
+        <input type="button" value="取消" onclick="cancelModal();">
     </div>
-
 {#对话框删除#}
     <div id="shadow1" class="shadow1 hide"></div>
-    <div id="delmodal1" class="modal1 hide">
+    <div id="delModal" class="add-modal1 hide">
         <h3>删除框</h3>
         <p>
             <a id = "delid" style="display: none"></a>
@@ -192,7 +158,7 @@
             <a id = "delname"></a>
         </p>
         <input type="button" value="提交" onclick="delAjaxSend();"><span id="errormsg"></span>
-        <input type="button" value="取消" onclick="cancelmodal1();">
+        <input type="button" value="取消" onclick="cancelModal();">
     </div>
 </body>
 {% endblock %}
