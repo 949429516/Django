@@ -6,6 +6,10 @@ db = dbManager()
 
 
 def classes(request):
+    # 从请求的cookies中获取凭证
+    tk = request.COOKIES.get('ticket')
+    if not tk:
+        return redirect('/login/')
     conn = pymysql.connect(host="localhost", port=3306, user="root",
                            password="19950811", database="oldboy",
                            charset="utf8")
@@ -126,3 +130,18 @@ def modal_edit_class(request):
 
 def layout(request):
     return render(request, 'layout.html')
+
+
+def login(request):
+    if request.method == "GET":
+        return render(request, 'login.html')
+    else:
+        user = request.POST.get('username')
+        pwd = request.POST.get('password')
+        if user == "wkl" and pwd == "123456":
+            obj = redirect('/classes/')
+            # 回写cookies
+            obj.set_cookie('ticket', 'asddfasdgasd')
+            return obj
+        else:
+            return render(request, 'login.html')
