@@ -5,11 +5,22 @@ import pymysql, json
 db = dbManager()
 
 
+def myCookies(fn):
+    # 使用装饰器添加cookies验证
+    def myrequest(request, *args, **kwargs):
+        tk = request.COOKIES.get('ticket')
+        if not tk:
+            return redirect('/login/')
+        return fn(request, *args, **kwargs)
+    return myrequest
+
+
+@myCookies
 def classes(request):
     # 从请求的cookies中获取凭证
-    tk = request.COOKIES.get('ticket')
-    if not tk:
-        return redirect('/login/')
+    # tk = request.COOKIES.get('ticket')
+    # if not tk:
+    #     return redirect('/login/')
     conn = pymysql.connect(host="localhost", port=3306, user="root",
                            password="19950811", database="oldboy",
                            charset="utf8")
