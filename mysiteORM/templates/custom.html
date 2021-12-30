@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.css">
 </head>
 <body>
     <h1>用户列表</h1>
@@ -11,6 +12,11 @@
             <li>{{ row.name }}</li>
         {% endfor %}
     </ul>
-    {{ pageinfo.pager|safe }}
+
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+          {{ pageinfo.pager|safe }}
+      </ul>
+    </nav>
 </body>
 </html>
