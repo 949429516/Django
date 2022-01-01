@@ -39,9 +39,61 @@ def test(request):
     # result = models.UserInfo.objects.all().values('id', 'name', 'ut__title')
     # QuerySet[{'id':'xxx','name':'xxx'}] values('id', 'name')
     # QuerySet[(1,'f'),()] values_list('id', 'name')
-    result = models.UserInfo.objects.all().values('id', 'name')
-    for row in result:
-        print(row)
+
+    # 排序
+    # result = models.UserInfo.objects.all().order_by('id')
+
+    # 分组
+    # from django.db.models import Count, Sum, Min
+    # v = models.UserInfo.objects.values('ut_id').annotate(xxx=Count('id'))
+    # print(v.query)
+    # v = models.UserInfo.objects.values('ut_id').annotate(xxx=Count('id')).filter(xxx__gt=2)
+    # print(v.query)
+
+    #
+    # models.UserInfo.objects.filter(id__gt=1)
+    # models.UserInfo.objects.filter(id__in=[1, 2, 3])#在这些之中
+    # models.UserInfo.objects.filter(id__range=[1, 2])#范围内
+    # models.UserInfo.objects.filter(name__startwith='xxx')#以开头
+    # models.UserInfo.objects.filter(name__contains='xxx')#包含
+    # models.UserInfo.objects.exclude(id=1)# 不等于
+
+    # F Q extre F用于操作字段更新时取到原来的值 Q一般用于组合查询（复杂情况下）
+    from django.db.models import F, Q
+    models.UserInfo.objects.all().update(age=F("age") + 1)
+
+    condition = {'id': 1, 'name': 'root'}
+    models.UserInfo.objects.filter(**condition)
+    # Q对象的方式
+    models.UserInfo.objects.filter(Q(id__gt=1) | Q(id=10))  # id>1或者id=10
+    models.UserInfo.objects.filter(Q(id=1) & Q(id=10))  # id=1并且id=10
+    # Q方法的方式
+    q1 = Q()
+    q1.connector = "OR"
+    q1.children.append(('id', 1))
+    q1.children.append(('id', 10))
+    q1.children.append(('id', 9))
+    q2 = Q()
+    q2.connector = "OR"
+    q2.children.append(('c1', 1))
+    q2.children.append(('c1', 10))
+    q2.children.append(('c1', 9))
+    con = Q()
+    con.add(q1, 'AND')
+    con.add(q2, 'AND')
+    # 相当于(id=1 or id = 10 or id =9) and (c1=1 or c1=10 or c1=9)
+    condition_dict = {
+        'k1': [1, 2, 3, 4],
+        'k2': [1, ],
+    }
+    con = Q()
+    for k, v in condition_dict:
+        q = Q()
+        q.connector = 'OR'
+        for i in v:
+            q.children.append('id', i)
+        con.add(q, 'AND')
+    models.UserInfo.objects.filter(con)
     return HttpResponse("...")
 
 

@@ -12,7 +12,7 @@ class UserType(models.Model):
     用户类型
     """
     title = models.CharField(max_length=32)
-    #fo = models.ForeignKey('Foo', on_delete=models.CASCADE)
+    # fo = models.ForeignKey('Foo', on_delete=models.CASCADE)
 
 
 class UserInfo(models.Model):
@@ -22,3 +22,6 @@ class UserInfo(models.Model):
     name = models.CharField(max_length=16)
     age = models.IntegerField()
     ut = models.ForeignKey('UserType', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "%s-%s" % (self.id, self.name)

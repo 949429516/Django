@@ -65,6 +65,7 @@ class Login(View):
     put     更新
     delete  删除
     """
+
     # 调用父类方法
     def dispatch(self, request, *args, **kwargs):
         # 这里类似于装饰器
