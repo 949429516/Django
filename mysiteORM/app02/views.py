@@ -47,6 +47,7 @@ def test(request):
     # from django.db.models import Count, Sum, Min
     # v = models.UserInfo.objects.values('ut_id').annotate(xxx=Count('id'))
     # print(v.query)
+    # having
     # v = models.UserInfo.objects.values('ut_id').annotate(xxx=Count('id')).filter(xxx__gt=2)
     # print(v.query)
 
@@ -58,7 +59,7 @@ def test(request):
     # models.UserInfo.objects.filter(name__contains='xxx')#包含
     # models.UserInfo.objects.exclude(id=1)# 不等于
 
-    # F Q extre F用于操作字段更新时取到原来的值 Q一般用于组合查询（复杂情况下）
+    # F Q  F用于操作字段更新时取到原来的值 Q一般用于组合查询（复杂情况下）
     from django.db.models import F, Q
     models.UserInfo.objects.all().update(age=F("age") + 1)
 
@@ -94,6 +95,49 @@ def test(request):
             q.children.append('id', i)
         con.add(q, 'AND')
     models.UserInfo.objects.filter(con)
+    # extra额外的查询条件
+    # select id,name,(select count(1) from tb) as n from xb
+    v = models.UserInfo.objects.all().extra(select={'n': 'select count(1) from app02_usertype where id>%s',
+                                                    'm': 'select count(1) from app02_usertype where id>%s'},
+                                            select_params=[1, 2])
+    for obj in v:
+        print(obj.name, obj.id, obj.n)
+    # 可以写原生的sql语句中间是and连接
+    models.UserInfo.objects.extra(
+        where=["id=1 or id=2", "name='alex'"]
+    )
+    # 多长表查询 select * from app01_userinfo,app01_usertype where app01_usertype.id=app01_userinfo.ut_id
+    models.UserInfo.objects.extra(
+        tables=['app01_usertype'],
+        where=['app01_usertype.id=app01_userinfo.ut_id']
+    )
+    # extra综合
+    models.UserInfo.objects.extra(
+        select={'newid': 'select count(1) from app02_usertype where id>%s'},
+        select_params=[1, ],
+        where=['age>%s'],
+        params=[18, ],
+        order_by=['-age'],
+        tables=['app01_usertype']
+    )
+    """
+    select
+        app02_userinfo.id,
+    (select count(1) from app02_usertype where id>1) as newid
+    from 
+        app02_userinfo,app02_usertype
+    where 
+        app02_userinfo.age>18
+    order by 
+        app02_userinfo.age desc;
+    """
+    # 原生sql
+    from django.db import connection, connections
+    cursor = connection.cursor()
+    # 连接不同数据库用connections在setting配置的数据库名
+    cursors = connections['default'].cursor()
+    cursor.execute('select * from app02_userinfo')
+    row= cursor.fetchone()
     return HttpResponse("...")
 
 
