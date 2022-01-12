@@ -1,13 +1,13 @@
 from django.shortcuts import render, HttpResponse
 from django.core.paginator import Paginator, Page, EmptyPage, PageNotAnInteger
 from utils.pager import PageInfo
-# Create your views here.
+from django.db.models import Count
 
 from app02 import models
 
 
 def test(request):
-    # 创建数据
+    # 创建数据 返回值就是增加的数据,create每次都会提交一次
     # models.UserType.objects.create(title="普通用户")
     # models.UserType.objects.create(title="二逼用户")
     # models.UserType.objects.create(title="牛逼用户")
@@ -16,12 +16,39 @@ def test(request):
     # models.UserInfo.objects.create(name='李沁园', age=31, ut_id=2)
     # models.UserInfo.objects.create(name='陈昊', age=29, ut_id=3)
     # models.UserInfo.objects.create(name='吴瑶', age=24, ut_id=2)
+    # obj = models.UserInfo.objects.create(**{'title': 'xxx'})
+
+    # 如果批量增加直接使用create会频繁写入数据库，造成数据库的性能下降用下面的方法统一提交
+    # obj = models.UserType(title='xx')#这时候还未提交
+    # obj.save()#保存
+
+    # objs = [
+    #     models.UserType(name='r11'),
+    # ]
+    # models.UserType.objects.bulk_create(objs, 10)#每次提交10条,不要超过999
+
+    # get_or_create如果存在则获取，否则创建;defaults创建时其他字段的值,返回obj=获取到的对象 create=True False
+    # update_or_create如果存在则更新，否则创建;defaults创建时其他字段的值
+    # obj, created = models.UserInfo.objects.get_or_create(username='root1', defaults={'email': 'xxx@qq.com', 'ut_id': 2})
 
     # 获取 正向操作
     # QuerySet[obj,obj,obj]
     # result = models.UserInfo.objects.all()
     # for obj in result:
     #     print(obj.name, obj.age, obj.ut.title)
+
+    # only 只获取
+    # models.UserInfo.objects.all().only('ut_id', 'name')
+
+    # defer 除了name其他都获取
+    # models.UserInfo.objects.all().defer('name')
+
+    # dates
+
+    # datetimes
+
+    # get获取一个 找不到或者多个抛出异常，fitst找不到返回None
+    # models.UserInfo.objects.get(id=1)
 
     # 外键 反向操作 表名小写_set.all()
     # obj = models.UserType.objects.all().first()
@@ -43,7 +70,7 @@ def test(request):
     # 排序
     # result = models.UserInfo.objects.all().order_by('id')
 
-    # 分组
+    # 分组聚合
     # from django.db.models import Count, Sum, Min
     # v = models.UserInfo.objects.values('ut_id').annotate(xxx=Count('id'))
     # print(v.query)
@@ -51,9 +78,20 @@ def test(request):
     # v = models.UserInfo.objects.values('ut_id').annotate(xxx=Count('id')).filter(xxx__gt=2)
     # print(v.query)
 
-    #
+    # aggreate整张表聚合
+    result = models.UserInfo.objects.aggregate(k=Count('ut_id', distinct=True), n=Count('id'))
+    print(result)
+
+    # 去重复distinct
+    # models.UserInfo.objects.values('ut_id').distinct()#mysql
+    # select distinct ut_id from userinfo;
+    # models.UserInfo.objects.distinct('ut_id')#postgresql
+
     # models.UserInfo.objects.filter(id__gt=1)
     # models.UserInfo.objects.filter(id__in=[1, 2, 3])#在这些之中
+
+    # models.UserInfo.objects.in_bulk([1, 2, 3]) #id_in的简便写法
+
     # models.UserInfo.objects.filter(id__range=[1, 2])#范围内
     # models.UserInfo.objects.filter(name__startwith='xxx')#以开头
     # models.UserInfo.objects.filter(name__contains='xxx')#包含
@@ -124,20 +162,33 @@ def test(request):
     select
         app02_userinfo.id,
     (select count(1) from app02_usertype where id>1) as newid
-    from 
+    from
         app02_userinfo,app02_usertype
-    where 
+    where
         app02_userinfo.age>18
-    order by 
+    order by
         app02_userinfo.age desc;
     """
+
+    # using 指定在哪个数据库获取数据
+    models.UserInfo.objects.all().using('db2')
+
     # 原生sql
     from django.db import connection, connections
     cursor = connection.cursor()
     # 连接不同数据库用connections在setting配置的数据库名
     cursors = connections['default'].cursor()
     cursor.execute('select * from app02_userinfo')
-    row= cursor.fetchone()
+    row = cursor.fetchone()
+
+    # 原生sql---raw
+    models.UserInfo.objects.raw('select * from app02_userinfo')
+    # 这样写有可能会报错，原因是userinfo对象中可能没有usertype的列名,解决方法设置别名或(select id as ut_id)者前后同为一张表
+    models.UserInfo.objects.raw('select * from app02_usertype')
+    # 设置别名方法2
+    name_map = {'fitst': 'first_name', 'list': 'list_name'}
+    models.UserType.objects.raw('select * from app02_userinfo', translations=name_map)
+
     return HttpResponse("...")
 
 
