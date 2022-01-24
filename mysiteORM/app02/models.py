@@ -29,12 +29,21 @@ class UserInfo(models.Model):
 
 class Boy(models.Model):
     name = models.CharField(max_length=32)
-
+    # django可以协助你新建一个关联表
+    # m = models.ManyToManyField('Gril')
 
 class Gril(models.Model):
     name = models.CharField(max_length=32)
+    # m = models.ManyToManyField('Boy')
+
 
 
 class Love(models.Model):
     boy = models.ForeignKey('Boy', on_delete=True)
     gril = models.ForeignKey('Gril', on_delete=True)
+
+    class Meta:
+        # 联合唯一索引
+        unique_together = [
+            ('boy', 'gril')
+        ]
