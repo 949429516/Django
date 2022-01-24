@@ -25,3 +25,16 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return "%s-%s" % (self.id, self.name)
+
+
+class Boy(models.Model):
+    name = models.CharField(max_length=32)
+
+
+class Gril(models.Model):
+    name = models.CharField(max_length=32)
+
+
+class Love(models.Model):
+    boy = models.ForeignKey('Boy', on_delete=True)
+    gril = models.ForeignKey('Gril', on_delete=True)

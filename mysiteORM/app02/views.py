@@ -56,10 +56,21 @@ def test(request):
     # for row in obj.userinfo_set.all():
     #     print(row.name, row.age)
 
-    # 连表查询
+    # 连表查询,使用连表会使性能下降.但是,ForeignKey约束，节省空间
     # result = models.UserType.objects.all()
     # for item in result:
     #     print(item.title, item.userinfo_set.filter(name="xx"))
+
+    # select_related以上的操作每次for循环会使用外键查询都会再次访问数据库造成性能下降，如果连表推进下面的方法
+    # select * from userinfo inner join usertype on userinfo.ut = usertype.id
+    # result = models.UserInfo.objects.all().select_related('ut')
+
+    # prefetch_related实际上是两次单表查询
+    # result = models.UserInfo.objects.all().prefetch_related('ut')
+    # Django查询了两次表，第一次查询外键表，第二次使用查询的结果查询外键关联的表，最终整合
+    # select * from userinfo; Django内部 ut_id = [2,4]; select * from usertype where id in [2,4];
+    # for row in result:
+    #    print(row.id, row.ut.title)
 
     # values取值 循环时无法跨表,只有在获取的时候跨表
     # values跨表
@@ -79,8 +90,8 @@ def test(request):
     # print(v.query)
 
     # aggreate整张表聚合
-    result = models.UserInfo.objects.aggregate(k=Count('ut_id', distinct=True), n=Count('id'))
-    print(result)
+    # result = models.UserInfo.objects.aggregate(k=Count('ut_id', distinct=True), n=Count('id'))
+    # print(result)
 
     # 去重复distinct
     # models.UserInfo.objects.values('ut_id').distinct()#mysql
@@ -89,7 +100,7 @@ def test(request):
 
     # models.UserInfo.objects.filter(id__gt=1)
     # models.UserInfo.objects.filter(id__in=[1, 2, 3])#在这些之中
-
+    # models.UserInfo.objects.filter(age__isnull=True) #判断为空
     # models.UserInfo.objects.in_bulk([1, 2, 3]) #id_in的简便写法
 
     # models.UserInfo.objects.filter(id__range=[1, 2])#范围内
@@ -98,98 +109,139 @@ def test(request):
     # models.UserInfo.objects.exclude(id=1)# 不等于
 
     # F Q  F用于操作字段更新时取到原来的值 Q一般用于组合查询（复杂情况下）
-    from django.db.models import F, Q
-    models.UserInfo.objects.all().update(age=F("age") + 1)
+    #     from django.db.models import F, Q
+    #     models.UserInfo.objects.all().update(age=F("age") + 1)
+    #
+    #     condition = {'id': 1, 'name': 'root'}
+    #     models.UserInfo.objects.filter(**condition)
+    #     # Q对象的方式
+    #     models.UserInfo.objects.filter(Q(id__gt=1) | Q(id=10))  # id>1或者id=10
+    #     models.UserInfo.objects.filter(Q(id=1) & Q(id=10))  # id=1并且id=10
+    #     # Q方法的方式
+    #     q1 = Q()
+    #     q1.connector = "OR"
+    #     q1.children.append(('id', 1))
+    #     q1.children.append(('id', 10))
+    #     q1.children.append(('id', 9))
+    #     q2 = Q()
+    #     q2.connector = "OR"
+    #     q2.children.append(('c1', 1))
+    #     q2.children.append(('c1', 10))
+    #     q2.children.append(('c1', 9))
+    #     con = Q()
+    #     con.add(q1, 'AND')
+    #     con.add(q2, 'AND')
+    #     # 相当于(id=1 or id = 10 or id =9) and (c1=1 or c1=10 or c1=9)
+    #     condition_dict = {
+    #         'k1': [1, 2, 3, 4],
+    #         'k2': [1, ],
+    #     }
+    #     con = Q()
+    #     for k, v in condition_dict:
+    #         q = Q()
+    #         q.connector = 'OR'
+    #         for i in v:
+    #             q.children.append('id', i)
+    #         con.add(q, 'AND')
+    #     models.UserInfo.objects.filter(con)
+    #     # extra额外的查询条件
+    #     # select id,name,(select count(1) from tb) as n from xb
+    #     v = models.UserInfo.objects.all().extra(select={'n': 'select count(1) from app02_usertype where id>%s',
+    #                                                     'm': 'select count(1) from app02_usertype where id>%s'},
+    #                                             select_params=[1, 2])
+    #     for obj in v:
+    #         print(obj.name, obj.id, obj.n)
+    #     # 可以写原生的sql语句中间是and连接
+    #     models.UserInfo.objects.extra(
+    #         where=["id=1 or id=2", "name='alex'"]
+    #     )
+    #     # 多长表查询 select * from app01_userinfo,app01_usertype where app01_usertype.id=app01_userinfo.ut_id
+    #     models.UserInfo.objects.extra(
+    #         tables=['app01_usertype'],
+    #         where=['app01_usertype.id=app01_userinfo.ut_id']
+    #     )
+    #     # extra综合
+    #     models.UserInfo.objects.extra(
+    #         select={'newid': 'select count(1) from app02_usertype where id>%s'},
+    #         select_params=[1, ],
+    #         where=['age>%s'],
+    #         params=[18, ],
+    #         order_by=['-age'],
+    #         tables=['app01_usertype']
+    #     )
+    #     """
+    #     select
+    #         app02_userinfo.id,
+    #     (select count(1) from app02_usertype where id>1) as newid
+    #     from
+    #         app02_userinfo,app02_usertype
+    #     where
+    #         app02_userinfo.age>18
+    #     order by
+    #         app02_userinfo.age desc;
+    #     """
+    #
+    #     # using 指定在哪个数据库获取数据
+    #     models.UserInfo.objects.all().using('db2')
+    #
+    #
+    #     # 原生sql
+    #     from django.db import connection, connections
+    #     cursor = connection.cursor()
+    #     # 连接不同数据库用connections在setting配置的数据库名
+    #     cursors = connections['default'].cursor()
+    #     cursor.execute('select * from app02_userinfo')
+    #     row = cursor.fetchone()
+    #
+    #
+    #     # 原生sql---raw
+    #     models.UserInfo.objects.raw('select * from app02_userinfo')
+    #     # 这样写有可能会报错，原因是userinfo对象中可能没有usertype的列名,解决方法设置别名或(select id as ut_id)者前后同为一张表
+    #     models.UserInfo.objects.raw('select * from app02_usertype')
+    #     # 设置别名方法2
+    #     name_map = {'fitst': 'first_name', 'list': 'list_name'}
+    #     models.UserType.objects.raw('select * from app02_userinfo', translations=name_map)
+    #
+    # 多对多
+    # objs = [
+    #     models.Boy(name="李沁岩"),
+    #     models.Boy(name="王森宝"),
+    #     models.Boy(name="陈昊"),
+    #     models.Boy(name="赵恒"),
+    # ]
+    # models.Boy.objects.bulk_create(objs, 5)
+    # obj = [
+    #     models.Boy(name="吴瑶"),
+    #     models.Boy(name="郭成凤"),
+    #     models.Boy(name="王玺"),
+    #     models.Boy(name="王小雅"),
+    # ]
+    # models.Gril.objects.bulk_create(obj, 5)
+    # models.Love.objects.create(boy_id=1, gril_id=1)
+    # models.Love.objects.create(boy_id=1, gril_id=4)
+    # models.Love.objects.create(boy_id=2, gril_id=4)
+    # models.Love.objects.create(boy_id=2, gril_id=2)
+    # 1.查找与李沁岩有关系的姑娘
+    # obj = models.Boy.objects.filter(name='李沁岩').first()
+    # love_list = obj.love_set.all()
+    # for row in love_list:
+    #     print(row.gril.name)
 
-    condition = {'id': 1, 'name': 'root'}
-    models.UserInfo.objects.filter(**condition)
-    # Q对象的方式
-    models.UserInfo.objects.filter(Q(id__gt=1) | Q(id=10))  # id>1或者id=10
-    models.UserInfo.objects.filter(Q(id=1) & Q(id=10))  # id=1并且id=10
-    # Q方法的方式
-    q1 = Q()
-    q1.connector = "OR"
-    q1.children.append(('id', 1))
-    q1.children.append(('id', 10))
-    q1.children.append(('id', 9))
-    q2 = Q()
-    q2.connector = "OR"
-    q2.children.append(('c1', 1))
-    q2.children.append(('c1', 10))
-    q2.children.append(('c1', 9))
-    con = Q()
-    con.add(q1, 'AND')
-    con.add(q2, 'AND')
-    # 相当于(id=1 or id = 10 or id =9) and (c1=1 or c1=10 or c1=9)
-    condition_dict = {
-        'k1': [1, 2, 3, 4],
-        'k2': [1, ],
-    }
-    con = Q()
-    for k, v in condition_dict:
-        q = Q()
-        q.connector = 'OR'
-        for i in v:
-            q.children.append('id', i)
-        con.add(q, 'AND')
-    models.UserInfo.objects.filter(con)
-    # extra额外的查询条件
-    # select id,name,(select count(1) from tb) as n from xb
-    v = models.UserInfo.objects.all().extra(select={'n': 'select count(1) from app02_usertype where id>%s',
-                                                    'm': 'select count(1) from app02_usertype where id>%s'},
-                                            select_params=[1, 2])
-    for obj in v:
-        print(obj.name, obj.id, obj.n)
-    # 可以写原生的sql语句中间是and连接
-    models.UserInfo.objects.extra(
-        where=["id=1 or id=2", "name='alex'"]
-    )
-    # 多长表查询 select * from app01_userinfo,app01_usertype where app01_usertype.id=app01_userinfo.ut_id
-    models.UserInfo.objects.extra(
-        tables=['app01_usertype'],
-        where=['app01_usertype.id=app01_userinfo.ut_id']
-    )
-    # extra综合
-    models.UserInfo.objects.extra(
-        select={'newid': 'select count(1) from app02_usertype where id>%s'},
-        select_params=[1, ],
-        where=['age>%s'],
-        params=[18, ],
-        order_by=['-age'],
-        tables=['app01_usertype']
-    )
-    """
-    select
-        app02_userinfo.id,
-    (select count(1) from app02_usertype where id>1) as newid
-    from
-        app02_userinfo,app02_usertype
-    where
-        app02_userinfo.age>18
-    order by
-        app02_userinfo.age desc;
-    """
+    # love_list = models.Love.objects.filter(boy_id__name="李沁岩")
+    # for row in love_list:
+    #     print(row.gril.name)
 
-    # using 指定在哪个数据库获取数据
-    models.UserInfo.objects.all().using('db2')
+    # 上面的方法每次for循环都会去查询一次数据库
+    # love_list = models.Love.objects.filter(boy_id__name="李沁岩").values("gril__name")
+    # for row in love_list:
+    #     print(row["gril__name"])
 
-    # 原生sql
-    from django.db import connection, connections
-    cursor = connection.cursor()
-    # 连接不同数据库用connections在setting配置的数据库名
-    cursors = connections['default'].cursor()
-    cursor.execute('select * from app02_userinfo')
-    row = cursor.fetchone()
-
-    # 原生sql---raw
-    models.UserInfo.objects.raw('select * from app02_userinfo')
-    # 这样写有可能会报错，原因是userinfo对象中可能没有usertype的列名,解决方法设置别名或(select id as ut_id)者前后同为一张表
-    models.UserInfo.objects.raw('select * from app02_usertype')
-    # 设置别名方法2
-    name_map = {'fitst': 'first_name', 'list': 'list_name'}
-    models.UserType.objects.raw('select * from app02_userinfo', translations=name_map)
-
-    return HttpResponse("...")
+    # love_list = models.Love.objects.filter(boy_id__name="李沁岩").select_related('gril')
+    # for obj in love_list:
+    #     print(obj.gril.name)
+    love_list = models.Love.objects.filter(boy_id__name="李沁岩")
+    print(love_list.query)
+    return HttpResponse('...')
 
 
 def index(request):
@@ -238,4 +290,7 @@ def custom(request):
     start = pageinfo.start()
     end = pageinfo.end()
     user_list = models.UserInfo.objects.all()[start:end]
+    # django中也有安全标签 xss攻击慎用 safe和mark_safe
+    # from django.utils.safestring import mark_safe
+    # user_list = mark_safe(user_list)
     return render(request, 'custom.html', {'user_list': user_list, 'pageinfo': pageinfo})
