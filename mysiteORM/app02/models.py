@@ -31,7 +31,13 @@ class Boy(models.Model):
     name = models.CharField(max_length=32)
     # django可以协助你新建一个关联表
     # m = models.ManyToManyField('Gril')
-
+    # ManyToManyField第二种方法可以指定表,但是只有查询和清空的功能
+    # m = models.ManyToManyField('Gril',through='Love',through_fields=('boy','gril',))
+    # obj = models.Boy.objects.filter(name='xxx').first()
+    # 增加obj.m.add(2) obj.m.add(*[4,]) 重置obj.m.set(2) 删除obj.m.remove(2) 有关的删除obj.m.clear()
+    # 关联表的对象gril_list = obj.m.all()
+    # 反向关联obj = models.Gril.objects.filter(name='xxx').first()
+    # v = obj.boy_set.all()
 class Gril(models.Model):
     name = models.CharField(max_length=32)
     # m = models.ManyToManyField('Boy')
