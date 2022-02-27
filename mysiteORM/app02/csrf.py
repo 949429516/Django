@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 
 # 全局打开后局部禁用csrf加上csrf_exempt该装饰器
 # 全局禁用后局部使用加上csrf_protect该装饰器
-@csrf_exempt
+@csrf_protect
 def csrf1(request):
     if request.method == "GET":
         return render(request, 'csrf.html')
@@ -22,7 +22,7 @@ CBV中加装饰器的三种方式	装饰器csrf_protect	装饰器csrf_exempt
 给dispatch函数加	    有效	                有效"""
 
 
-# @method_decorator(csrf_exempt, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 # 为特定请求添加
 # @method_decorator(csrf_exempt, name='get')
 # @method_decorator(csrf_exempt, name='post')

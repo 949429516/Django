@@ -5,10 +5,46 @@
     <title>Title</title>
 </head>
 <body>
-    <form method="post" action={% url 'csrf' %}>
-{#        {% csrf_token %}#}
-        <input type="text" name="user">
+    <form method="post" action= {% url 'csrf' %}>
+        {% csrf_token %}
+        <input id = 'user' type="text" name="user">
         <input type="submit" value="提交">
+        <a onclick="submitForm();">Ajax提交</a>
     </form>
+    <script src="/static/jquery-1.11.3.js"></script>
+{#    方式1：携带csrf发送#}
+{#    <script>#}
+{#        function submitForm() {#}
+{#            var csrf = $('input[name="csrfmiddlewaretoken"]').val();#}
+{#            var user = $('#user').val();#}
+{#            $.ajax({#}
+{#                url:'',#}
+{#                type:'POST',#}
+{#                data:{"user" : user,'csrfmiddlewaretoken':csrf},#}
+{#                success:function(arg) {#}
+{#                    console.log(arg);#}
+{#                }#}
+{#            })#}
+{#        }#}
+{#    </script>#}
+
+
+{#    方式2：获取cookies值,Django发送的token在请求头#}
+    <script>
+        function submitForm() {
+            var strCookies = document.cookie;
+            var token = strCookies.split('=')[1];
+            var user = $('#user').val();
+            $.ajax({
+                url:'',
+                type:'POST',
+                headers:{'X-CSRFToken':token},
+                data:{"user" : user},
+                success:function(arg) {
+                    console.log(arg);
+                }
+            })
+        }
+    </script>
 </body>
 </html>
